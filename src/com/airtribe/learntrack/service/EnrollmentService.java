@@ -9,36 +9,23 @@ import com.airtribe.learntrack.util.IdGenerator;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class EnrollmentService {
     private EnrollmentRepository enrollmentRepository;
-    private Scanner scanner;
 
     public EnrollmentService() {
         enrollmentRepository = new EnrollmentRepository();
-        scanner = new Scanner(System.in);
     }
 
-    public void enrollStudent() {
-        System.out.println("Enter student id");
-        int studentId = scanner.nextInt();
-        System.out.println("Enter course id");
-        int courseId = scanner.nextInt();
-        scanner.nextLine();
-
+    public void enrollStudent(int studentId, int courseId) {
         Enrollment enrollment = new Enrollment(studentId, courseId, new Date(), EnrollmentStatus.ACTIVE);
         enrollment.setId(IdGenerator.getNextEnrollmentId());
         enrollmentRepository.addEnrollment(enrollment);
         System.out.println("Student enrolled successfully");
     }
 
-    public void viewEnrollmentsByStudent() {
-        System.out.println("Enter student id");
-        int studentId = scanner.nextInt();
-        scanner.nextLine();
-
+    public void viewEnrollmentsByStudent(int studentId) {
         ArrayList<Enrollment> enrollments = enrollmentRepository.getEnrollments();
         ArrayList<Enrollment> studentEnrollments = enrollments.stream()
                 .filter(e -> e.getStudentId() == studentId)
@@ -64,9 +51,9 @@ public class EnrollmentService {
         System.out.println();
     }
 
-    public void markEnrollmentCompleted() {
+    public void markEnrollmentCompleted(int id) {
         try {
-            Enrollment enrollment = findEnrollmentById();
+            Enrollment enrollment = findEnrollmentById(id);
             if (enrollment.getStatus() == EnrollmentStatus.ACTIVE) {
                 enrollment.setStatus(EnrollmentStatus.COMPLETED);
                 System.out.println("Enrollment marked as completed!");
@@ -78,9 +65,9 @@ public class EnrollmentService {
         }
     }
 
-    public void markEnrollmentCancelled() {
+    public void markEnrollmentCancelled(int id) {
         try {
-            Enrollment enrollment = findEnrollmentById();
+            Enrollment enrollment = findEnrollmentById(id);
             if (enrollment.getStatus() == EnrollmentStatus.ACTIVE) {
                 enrollment.setStatus(EnrollmentStatus.CANCELLED);
                 System.out.println("Enrollment marked as cancelled!");
@@ -92,10 +79,7 @@ public class EnrollmentService {
         }
     }
 
-    private Enrollment findEnrollmentById() throws EntityNotFoundException {
-        System.out.println("Enter enrollment id");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+    private Enrollment findEnrollmentById(int id) throws EntityNotFoundException {
         ArrayList<Enrollment> enrollments = enrollmentRepository.getEnrollments();
         Optional<Enrollment> enrollment = enrollments.stream().filter(e -> e.getId() == id).findAny();
         if (enrollment.isPresent()) {

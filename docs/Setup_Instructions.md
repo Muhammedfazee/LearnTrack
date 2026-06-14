@@ -51,8 +51,8 @@ If you see this output, your JDK is correctly installed and configured.
 
 ```bash
 cd LearnTrack
-javac -d out -sourcepath src src/com/airtribe/learntrack/Main.java
-java -cp out com.airtribe.learntrack.Main
+javac -d out -sourcepath src src/com/airtribe/learntrack/ui/Main.java
+java -cp out com.airtribe.learntrack.ui.Main
 ```
 
 You should see the main menu appear in the console.

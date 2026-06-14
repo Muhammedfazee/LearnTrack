@@ -7,26 +7,17 @@ import com.airtribe.learntrack.util.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Scanner;
 
 public class StudentService {
     private StudentRepository studentRepository;
-    private Scanner scanner;
 
     public StudentService() {
         studentRepository = new StudentRepository();
-        scanner =  new Scanner(System.in);
     }
 
-    public void addStudent(){
-        Student student = new Student();
+    public void addStudent(String firstName, String lastName, String email){
+        Student student = new Student(firstName, lastName, email, null, true);
         student.setId(IdGenerator.getNextStudentId());
-        System.out.println("Enter the first name");
-        student.setFirstName(scanner.nextLine());
-        System.out.println("Enter the last name");
-        student.setLastName(scanner.nextLine());
-        System.out.println("Enter the email");
-        student.setEmail(scanner.nextLine());
 
         studentRepository.addStudent(student);
         System.out.println("Student has been added successfully");
@@ -49,9 +40,9 @@ public class StudentService {
         System.out.println();
     }
 
-    public void searchStudent() {
+    public void searchStudent(int id) {
         try {
-            Student student = findStudentById();
+            Student student = findStudentById(id);
             System.out.println("Student found:");
             displayStudentDetails(student);
         } catch (EntityNotFoundException e) {
@@ -59,9 +50,7 @@ public class StudentService {
         }
     }
 
-    private Student findStudentById() throws EntityNotFoundException {
-        System.out.println("Enter student id");
-        int id = scanner.nextInt();
+    private Student findStudentById(int id) throws EntityNotFoundException {
         ArrayList<Student> students =  studentRepository.getStudents();
         Optional<Student> student = students.stream().filter(s->s.getId() == id).findAny();
         if (student.isPresent()) {
@@ -70,9 +59,9 @@ public class StudentService {
         throw new EntityNotFoundException("Student not found with id: " + id);
     }
 
-    public void deactivateStudent() {
+    public void deactivateStudent(int id) {
         try {
-            Student student = findStudentById();
+            Student student = findStudentById(id);
             if (student.isActive()){
                 student.setActive(false);
                 System.out.println("Student deactivation done!");

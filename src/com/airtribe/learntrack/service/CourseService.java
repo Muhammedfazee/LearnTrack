@@ -7,26 +7,15 @@ import com.airtribe.learntrack.util.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Scanner;
 
 public class CourseService {
     private CourseRepository courseRepository;
-    private Scanner scanner;
 
     public CourseService() {
         courseRepository = new CourseRepository();
-        scanner = new Scanner(System.in);
     }
 
-    public void addCourse() {
-        System.out.println("Enter the course name");
-        String courseName = scanner.nextLine();
-        System.out.println("Enter the description");
-        String description = scanner.nextLine();
-        System.out.println("Enter the duration in weeks");
-        int durationInWeeks = scanner.nextInt();
-        scanner.nextLine();
-
+    public void addCourse(String courseName, String description, int durationInWeeks) {
         Course course = new Course(courseName, description, durationInWeeks, true);
         course.setId(IdGenerator.getNextCourseId());
         courseRepository.addCourse(course);
@@ -51,9 +40,9 @@ public class CourseService {
         System.out.println();
     }
 
-    public void activateCourse() {
+    public void activateCourse(int id) {
         try {
-            Course course = findCourseById();
+            Course course = findCourseById(id);
             if (!course.isActive()) {
                 course.setActive(true);
                 System.out.println("Course activation done!");
@@ -65,9 +54,9 @@ public class CourseService {
         }
     }
 
-    public void deactivateCourse() {
+    public void deactivateCourse(int id) {
         try {
-            Course course = findCourseById();
+            Course course = findCourseById(id);
             if (course.isActive()) {
                 course.setActive(false);
                 System.out.println("Course deactivation done!");
@@ -79,10 +68,7 @@ public class CourseService {
         }
     }
 
-    private Course findCourseById() throws EntityNotFoundException {
-        System.out.println("Enter course id");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+    private Course findCourseById(int id) throws EntityNotFoundException {
         ArrayList<Course> courses = courseRepository.getCourses();
         Optional<Course> course = courses.stream().filter(c -> c.getId() == id).findAny();
         if (course.isPresent()) {

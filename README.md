@@ -12,7 +12,7 @@ A console-based Learning Management System built with Java. It allows managing s
 
 ```
 src/com/airtribe/learntrack/
-├── Main.java                  # Entry point with menu logic
+├── ui/Main.java               # Entry point with menu logic
 ├── constants/MenuOptions.java # Menu option constants
 ├── entity/                    # Data models (Person, Student, Course, Enrollment)
 ├── enums/EnrollmentStatus.java
@@ -31,19 +31,19 @@ src/com/airtribe/learntrack/
 
 ```bash
 cd LearnTrack
-javac -d out src/com/airtribe/learntrack/**/*.java src/com/airtribe/learntrack/Main.java
+javac -d out src/com/airtribe/learntrack/**/*.java src/com/airtribe/learntrack/ui/Main.java
 ```
 
 Or compile all Java files at once:
 
 ```bash
-javac -d out -sourcepath src src/com/airtribe/learntrack/Main.java
+javac -d out -sourcepath src src/com/airtribe/learntrack/ui/Main.java
 ```
 
 ### Run
 
 ```bash
-java -cp out com.airtribe.learntrack.Main
+java -cp out com.airtribe.learntrack.ui.Main
 ```
 
 ## Usage
